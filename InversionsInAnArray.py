@@ -21,12 +21,21 @@ class InversionInAnArray(object):
                     count += 1
         return count
 
-    def modified_merge(self, A, start, mid, end):
+    def modified_merge(self, A, start, mid, end) -> int:
+        """Merging two subarrays in one sorted array.
+        Args:
+            A: array of integers.
+            start: start index.
+            mid: middle index.
+            end: last index.
+        Returns:
+            int
+        """
         num_of_inv = 0
         len_subarray1 = mid - start + 1
         len_subarray2 = end - mid
-        left_subarray = []
-        right_subarray = []
+        left_subarray = [] # left sorted array.
+        right_subarray = [] # right sorted array.
         for i in range(len_subarray1):
             left_subarray.append(A[start + i])
         for i in range(len_subarray2):
@@ -41,17 +50,17 @@ class InversionInAnArray(object):
             else:
                 A[k] = right_subarray[j]
                 j += 1
-                num_of_inv += 1
+                num_of_inv += j #inversion will occur
             k += 1
         if i == len_subarray1:
             for m in range(j, len_subarray2):
                 A[k] = right_subarray[m]
                 k += 1
         if j == len_subarray2:
+            num_of_inv += len_subarray2 - 1 # Inversion will occur here as well.
             for m in range(i, len_subarray1):
                 A[k] = left_subarray[m]
-                k += 1
-            num_of_inv += (len_subarray1 - i )     
+                k += 1       
         return num_of_inv
     
     def modified_merge_sort(self, A, start, end) -> int:
@@ -65,9 +74,9 @@ class InversionInAnArray(object):
         """
         if start < end:
             mid = (start + end) // 2
-            left_count = self.modified_merge_sort(A, start, mid)
-            right_count = self.modified_merge_sort(A, mid + 1, end)
-            return self.modified_merge(A, start, mid, end) + left_count + right_count
+            left_count = self.modified_merge_sort(A, start, mid) #getting left subcount
+            right_count = self.modified_merge_sort(A, mid + 1, end) #getting right subcount
+            return self.modified_merge(A, start, mid, end) + left_count + right_count #combining the result
         return 0
 
     def num_of_inversions_efficient(self, array) -> int:
@@ -83,3 +92,5 @@ class InversionInAnArray(object):
 inv = InversionInAnArray()
 print(inv.num_of_inversions_naive([2, 3, 8, 6, 1, 0]))
 print(inv.num_of_inversions_efficient([2, 3, 8, 6, 1, 0]))
+print(inv.num_of_inversions_naive([1, 2, 3, 4, 5, 6, 7, 8, 9]))
+print(inv.num_of_inversions_efficient([1, 2, 3, 4, 5, 6, 7, 8, 9]))
